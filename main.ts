@@ -59,6 +59,14 @@ async function home(request: Request) {
             content: `🏓 Pong !`,
           },
         });
+      case "codyfy":
+        const { value } = data.options.find((value: { name: string }) => value.name === "name");
+        return json({
+          type: 4,
+          data: {
+            content: `https://codyletroll.ml/cody/${value}`,
+          },
+        });
       default:
         return json({
           // Type 4 reponds with the below message retaining the user's
