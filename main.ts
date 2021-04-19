@@ -1,11 +1,7 @@
 // Sift is a small routing library that abstracts the details like registering
 // a fetch event listener and provides a simple function (serve) that has an
 // API to invoke a function for a specific path.
-import {
-  json,
-  serve,
-  validateRequest,
-} from "https://deno.land/x/sift@0.1.7/mod.ts";
+import { json, serve, validateRequest, } from "https://deno.land/x/sift@0.1.7/mod.ts";
 // TweetNaCl is a cryptography library that we use to verify requests
 // from Discord.
 import nacl from "https://cdn.skypack.dev/tweetnacl@v1.0.3";
@@ -41,7 +37,7 @@ async function home(request: Request) {
     );
   }
 
-  const { type = 0, data = { options: [] } } = JSON.parse(body);
+  const { type = 0, data = { options: [], name: "" } } = JSON.parse(body);
   // Discord performs Ping interactions to test our application.
   // Type 1 in a request implies a Ping interaction.
   if (type === 1) {
@@ -53,15 +49,27 @@ async function home(request: Request) {
   // Type 2 in a request is an ApplicationCommand interaction.
   // It implies that a user has issued a command.
   if (type === 2) {
-    const { value } = data.options.find((option: { name: string; }) => option.name === "name");
-    return json({
-      // Type 4 reponds with the below message retaining the user's
-      // input at the top.
-      type: 4,
-      data: {
-        content: `Hello, ${value}!`,
-      },
-    });
+    switch (data.name) {
+      case "ping":
+        const { value } = data.options.find((option: { name: string; }) => option.name === "name");
+        return json({
+          // Type 4 reponds with the below message retaining the user's
+          // input at the top.
+          type: 4,
+          data: {
+            content: `🏓 Pong !`,
+          },
+        });
+      default:
+        return json({
+          // Type 4 reponds with the below message retaining the user's
+          // input at the top.
+          type: 4,
+          data: {
+            content: `Oupsi mon loulou!`,
+          },
+        });
+    }
   }
 
   // We will return a bad request error as a valid Discord request
