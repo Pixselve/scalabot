@@ -51,7 +51,6 @@ async function home(request: Request) {
   if (type === 2) {
     switch (data.name) {
       case "ping":
-        const { value } = data.options.find((option: { name: string; }) => option.name === "name");
         return json({
           // Type 4 reponds with the below message retaining the user's
           // input at the top.
